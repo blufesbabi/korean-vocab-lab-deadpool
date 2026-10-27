@@ -1466,6 +1466,10 @@
         margin-top: 16px;
       }
       .practice-choice {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
         min-height: 60px;
         padding: 12px;
         text-align: left;
@@ -1477,6 +1481,15 @@
         line-height: 1.45;
         overflow-wrap: anywhere;
       }
+      .practice-choice .choice-letter {
+        width: 29px;
+        height: 29px;
+        border-radius: 3px;
+        background: #292024;
+        color: #f1dce0;
+        flex: 0 0 29px;
+      }
+      .practice-choice-label { min-width: 0; flex: 1 1 auto; overflow-wrap: anywhere; }
       .practice-choice:disabled {
         opacity: 1;
       }
@@ -1987,16 +2000,14 @@
 
 
 /* guide-size-boost */
-#memoryFeedback, #memoryFeedback * {
+#memoryFeedback > .practice-feedback, #memoryFeedback > .practice-feedback * {
   font-size: 17px !important;
   line-height: 1.65 !important;
 }
-#memoryFeedback strong, #memoryFeedback .practice-feedback strong {
-  font-size: 18px !important;
-}
+#memoryFeedback > .practice-feedback strong { font-size: 18px !important; }
 @media (min-width: 900px) {
-  #memoryFeedback, #memoryFeedback * { font-size: 18px !important; line-height: 1.7 !important; }
-  #memoryFeedback strong { font-size: 19px !important; }
+  #memoryFeedback > .practice-feedback, #memoryFeedback > .practice-feedback * { font-size: 18px !important; line-height: 1.7 !important; }
+  #memoryFeedback > .practice-feedback strong { font-size: 19px !important; }
 }
 #memoryHintText, #memoryTeacherHelpText {
   font-size: 17px !important;
@@ -4866,6 +4877,120 @@ body::before {
 .app:has(> main > #settingsView.active) > .merc-footer-portrait {
   grid-row: 2 !important;
   align-self: end !important;
+}
+</style>
+
+<style id="merc-cinematic-feedback-style">
+.merc-feedback {
+  position: relative; display: block; width: 100%; max-width: 100%;
+  margin: 8px 0 4px; padding: 0; aspect-ratio: 1536 / 443;
+  overflow: hidden; isolation: isolate; contain: layout paint;
+  container-type: inline-size; background: #050607; color: #f8f0ef; line-height: 1;
+}
+.merc-feedback--correct { aspect-ratio: 1536 / 513; }
+.merc-feedback__art { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: fill; user-select: none; pointer-events: none; }
+.merc-feedback__sr { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; white-space: nowrap !important; border: 0 !important; }
+.merc-feedback__word, .merc-feedback__meaning {
+  position: absolute; z-index: 1; display: flex; align-items: center; justify-content: center;
+  box-sizing: border-box; margin: 0; padding: 0 1px; overflow: hidden; text-align: center;
+  color: #f2e9e8; text-shadow: 0 1px 2px rgba(0,0,0,.95);
+}
+.merc-feedback__word {
+  font-family: "UnPenheulim", "Nanum Brush Script", "Nanum Pen Script", cursive, "Noto Serif KR", "Batang", "Nanum Myeongjo", "Noto Serif CJK KR", serif;
+  font-size: clamp(11px, 4cqw, 60px); font-weight: 900; line-height: .98;
+  letter-spacing: -.045em; word-break: keep-all; overflow-wrap: anywhere;
+  -webkit-text-stroke: .45px currentColor;
+}
+.merc-feedback__word.is-long { font-size: clamp(9px, 2.55cqw, 38px); }
+.merc-feedback--wrong .merc-feedback__word.is-extra-long { font-size: clamp(8px, 1.9cqw, 29px); }
+.merc-feedback--correct .merc-feedback__word.is-extra-long { font-size: clamp(10px, 2.45cqw, 36px); }
+.merc-feedback__meaning {
+  font-family: Arial, "Noto Sans", sans-serif; font-size: clamp(9px, 1.65cqw, 24px);
+  font-weight: 750; line-height: 1.05; letter-spacing: .035em; overflow-wrap: anywhere; word-break: normal;
+  justify-content: flex-start; text-align: left; text-transform: uppercase; padding-left: 2%;
+}
+.merc-feedback__meaning.is-long { font-size: clamp(8px, 1.3cqw, 19px); letter-spacing: 0; }
+.merc-feedback--wrong .merc-feedback__word { left: 32.7%; top: 74.2%; width: 13.5%; height: 22%; }
+.merc-feedback--wrong .merc-feedback__meaning { left: 47.7%; top: 75.0%; width: 26.5%; height: 20%; }
+.merc-feedback--correct .merc-feedback__word { left: 10.6%; top: 64.8%; width: 18.0%; height: 23%; }
+.merc-feedback--correct .merc-feedback__meaning { left: 31.0%; top: 67.0%; width: 26.5%; height: 20%; }
+ .merc-feedback__mobile-intel { display: none; }
+.merc-feedback-audio { margin: 4px 0 2px; }
+.merc-feedback--asset-fallback { background: radial-gradient(ellipse at 30% 30%, #321018, #070708 70%); }
+.merc-feedback--correct.merc-feedback--asset-fallback { background: radial-gradient(ellipse at 35% 45%, #063b2d, #050807 70%); }
+@container (max-width: 480px) {
+  .merc-feedback__word { font-size: clamp(10px, 3.15cqw, 16px); }
+  .merc-feedback__word.is-long { font-size: clamp(9px, 2.55cqw, 13px); }
+  .merc-feedback__meaning { font-size: clamp(8.5px, 1.8cqw, 10.5px); line-height: .98; letter-spacing: 0; }
+  .merc-feedback__meaning.is-long { font-size: clamp(8px, 1.35cqw, 9.5px); }
+}
+.merc-feedback__mobile-intel { display: none; }
+.merc-feedback__mobile-word, .merc-feedback__mobile-meaning { min-width: 0; margin: 0; }
+.merc-feedback__mobile-word {
+  flex: 0 0 34%; color: #f3e9e8; font-family: "UnPenheulim", "Nanum Brush Script", "Nanum Pen Script", cursive, "Noto Serif KR", "Batang", "Nanum Myeongjo", serif;
+  font-size: clamp(13px, 4.5cqw, 22px); line-height: 1.05; font-weight: 900;
+  letter-spacing: -.035em; overflow-wrap: anywhere;
+}
+.merc-feedback__mobile-word.is-long { font-size: clamp(12px, 3.9cqw, 17px); }
+.merc-feedback__mobile-divider { flex: 0 0 2px; align-self: stretch; min-height: 24px; background: #f3354a; }
+.merc-feedback--correct .merc-feedback__mobile-divider { background: #26e5aa; }
+.merc-feedback__mobile-meaning {
+  flex: 1 1 auto; color: #f0e8e7; font-family: Arial, "Noto Sans", sans-serif;
+  font-size: clamp(12px, 3.8cqw, 16px); line-height: 1.1; font-weight: 800;
+  letter-spacing: .02em; text-transform: uppercase; overflow-wrap: anywhere;
+}
+.merc-feedback__mobile-meaning.is-long { font-size: clamp(11px, 3.2cqw, 14px); letter-spacing: 0; }
+@media (max-width: 480px) {
+  .merc-feedback { aspect-ratio: auto; contain: none; }
+  .merc-feedback__art { position: relative; inset: auto; width: 100%; height: auto; object-fit: contain; }
+  .merc-feedback__word, .merc-feedback__meaning { display: none; }
+  .merc-feedback__mobile-intel {
+    position: relative; display: flex; align-items: center; gap: 9px;
+    width: 100%; box-sizing: border-box; padding: 8px 11px;
+    border-top: 1px solid rgba(255,52,72,.55);
+    background: linear-gradient(90deg, rgba(38,8,12,.98), rgba(8,8,9,.98));
+  }
+  .merc-feedback--correct .merc-feedback__mobile-intel {
+    border-top-color: rgba(38,229,170,.55);
+    background: linear-gradient(90deg, rgba(4,40,30,.98), rgba(5,8,7,.98));
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .merc-feedback { animation: merc-feedback-enter .22s ease-out both; }
+  @keyframes merc-feedback-enter { from { opacity: .65; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+}
+</style>
+
+<style id="kvl-answer-state-visibility-fix">
+/* Keep answer-state colors and indicators above the global Merc skin overrides. */
+#quizView .choice-main.correct, #quizView .choice-main.correct:hover,
+#listenView .practice-choice.correct, #listenView .practice-choice.correct:hover,
+#memoryView .practice-choice.correct, #memoryView .practice-choice.correct:hover {
+  background: rgba(12,119,78,.42) !important; border-color: #35e59a !important; color: #e2fff2 !important;
+  box-shadow: inset 3px 0 #35e59a, 0 0 0 1px rgba(53,229,154,.12) !important;
+}
+#quizView .choice-main.wrong, #quizView .choice-main.wrong:hover,
+#listenView .practice-choice.wrong, #listenView .practice-choice.wrong:hover,
+#memoryView .practice-choice.wrong, #memoryView .practice-choice.wrong:hover {
+  background: rgba(160,25,43,.42) !important; border-color: #ff5265 !important; color: #fff0f2 !important;
+  box-shadow: inset 3px 0 #ff5265, 0 0 0 1px rgba(255,82,101,.12) !important;
+}
+#quizView .choice-main.correct .choice-letter, #listenView .practice-choice.correct .choice-letter, #memoryView .practice-choice.correct .choice-letter {
+  background: #35e59a !important; color: #052318 !important;
+}
+#quizView .choice-main.wrong .choice-letter, #listenView .practice-choice.wrong .choice-letter, #memoryView .practice-choice.wrong .choice-letter {
+  background: #ff5265 !important; color: #fff !important;
+}
+#quizView .choice-main.correct::after, #listenView .practice-choice.correct::after, #memoryView .practice-choice.correct::after,
+#quizView .choice-main.wrong::after, #listenView .practice-choice.wrong::after, #memoryView .practice-choice.wrong::after {
+  display: inline-grid; place-items: center; flex: 0 0 24px; width: 24px; height: 24px; margin-left: auto;
+  border-radius: 50%; font-size: 14px; font-weight: 1000; line-height: 1;
+}
+#quizView .choice-main.correct::after, #listenView .practice-choice.correct::after, #memoryView .practice-choice.correct::after {
+  content: "✓"; background: #35e59a; color: #052318;
+}
+#quizView .choice-main.wrong::after, #listenView .practice-choice.wrong::after, #memoryView .practice-choice.wrong::after {
+  content: "✕"; background: #ff5265; color: #fff;
 }
 </style>
 
@@ -9557,6 +9682,8 @@ body::before {
               b.disabled = false;
               b.classList.remove("correct", "wrong");
             });
+            // An unanswered question must not inherit a stale true/false value from initialization.
+            // Its feedback stays empty until selectAnswer() records a result.
             $("feedback").replaceChildren();
             $("nextQuestion").disabled = false;
           } else {
@@ -9567,6 +9694,15 @@ body::before {
                 b.classList.add(q2.correct ? "correct" : "wrong");
               if (no === q2.item.no) b.classList.add("correct");
             });
+            // Restore the selected question's own feedback after navigating back.
+            // Otherwise a panel from the previously viewed question can remain visible.
+            $("feedback").replaceChildren();
+            if ((q2.correct === true || q2.correct === false) && typeof window.kvlRenderMercFeedback === "function") {
+              $("feedback").append(window.kvlRenderMercFeedback(q2.correct, q2.item));
+              if (!q2.correct && typeof window.kvlAppendMercQuizAudio === "function") {
+                window.kvlAppendMercQuizAudio($("feedback"), q2.item);
+              }
+            }
             $("nextQuestion").disabled = false;
           }
           $("nextQuestion").textContent =
@@ -9617,49 +9753,12 @@ body::before {
         });
         const feedback = $("feedback");
         feedback.replaceChildren();
-        const box = document.createElement("div");
-        box.className = "feedback-box " + (q.correct ? "good" : "bad");
-        const icon = document.createElement("span");
-        icon.textContent = "";
-        icon.style.display = "none";
-        const content = document.createElement("div");
-        const strong = document.createElement("strong");
-        if (q.correct) {
-          resetRoastStreak();
-          strong.textContent = t("fb.correct");
-        } else {
-          strong.textContent = pickRoast();
+        if (q.correct) resetRoastStreak();
+        else if (typeof pickRoast === "function") pickRoast(); // Keep existing roast-streak bookkeeping.
+        feedback.append(window.kvlRenderMercFeedback(q.correct, q.item));
+        if (!q.correct && typeof window.kvlAppendMercQuizAudio === "function") {
+          window.kvlAppendMercQuizAudio(feedback, q.item);
         }
-        content.append(strong);
-        const detail = document.createElement("span");
-        detail.textContent = q.correct
-          ? "Jawaban tepat. Dengarkan lagi pelafalannya supaya makin familiar."
-          : `${t("fb.answer")}: ${
-              sessionDirection === "ko-id"
-                ? q.item.meaning
-                : q.item.korean + " · " + q.item.meaning
-            }`;
-        content.append(detail);
-        box.append(icon, content);
-        if (!q.correct && getChosenVoice()) {
-          const audio = document.createElement("button");
-          audio.type = "button";
-          audio.className = "sound-button small";
-          audio.textContent = "🔊";
-          audio.title = "Dengarkan jawaban Korea yang benar";
-          audio.setAttribute(
-            "aria-label",
-            "Dengarkan jawaban Korea yang benar"
-          );
-          audio.style.marginLeft = "auto";
-          audio.addEventListener("click", (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            speakKorean(q.item.korean, audio);
-          });
-          box.append(audio);
-        }
-        feedback.append(box);
         $("correctCount").textContent = currentScore;
         $("scoreMeta").textContent = `Skor: ${currentScore}`;
         $("remainingCount").textContent =
@@ -12945,17 +13044,7 @@ function renderVocabularyList(query = "") {
         }
           $("writeHintText").classList.add("hidden");
           $("writeErrorClassify").classList.add("hidden");
-          const fb = document.createElement("div");
-          fb.className = "practice-feedback " + (q.correct ? "good" : "bad");
-          fb.innerHTML =
-            "<strong>" +
-            (q.correct ? "Bener ✓" : "Belum pas") +
-            "</strong><div>" +
-            item.korean +
-            " · " +
-            item.meaning +
-            "</div><div class='guide-hint'>Jawaban lu udah ke-save di soal ini.</div>";
-          $("writeFeedback").replaceChildren(fb);
+          $("writeFeedback").replaceChildren(window.kvlRenderMercFeedback(q.correct, item));
         } else {
           $("writeAnswer").value = q.userAnswer || "";
           $("writeAnswer").disabled = false;
@@ -13034,21 +13123,9 @@ function renderVocabularyList(query = "") {
         if ($("skipWrite")) $("skipWrite").disabled = true;
         $("writeAudio").disabled = !canPlayTts();
         $("writeAudio").onclick = () => speakKorean(item.korean, $("writeAudio"));
-        const fb = document.createElement("div");
-        fb.className = "practice-feedback " + (correct ? "good" : "bad");
-        const strong = document.createElement("strong");
-        strong.textContent = correct
-          ? (t("fb.correct") || "Bener") + " Hangeul-nya tepat."
-          : pickRoast();
         if (correct) resetRoastStreak();
-        const detail = document.createElement("div");
-        detail.textContent = correct
-          ? `${item.korean} = ${item.meaning}. ${
-              st.hintUsed ? "Petunjuk kepakai, jadi XP lebih kecil." : "Jawaban tanpa petunjuk."
-            }`
-          : `Yang bener nih: ${item.korean} · ${item.meaning}. Ejaan Hangeul harus cocok.`;
-        fb.append(strong, detail);
-        $("writeFeedback").replaceChildren(fb);
+        else if (typeof pickRoast === "function") pickRoast(); // Keep existing roast-streak bookkeeping.
+        $("writeFeedback").replaceChildren(window.kvlRenderMercFeedback(correct, item));
         if (!correct) {
           $("writeErrorClassify").classList.remove("hidden");
           $("writeErrorClassify").dataset.uid = item.uid;
@@ -13386,7 +13463,12 @@ function renderVocabularyList(query = "") {
         }
         $("listenStop").disabled = false;
         $("listenFeedback").replaceChildren();
-        if (q.feedbackHtml) {
+        if (q.answered && (q.correct === true || q.correct === false) && typeof window.kvlRenderMercFeedback === "function") {
+          $("listenFeedback").append(window.kvlRenderMercFeedback(q.correct, q.item));
+          if (!q.correct && typeof window.kvlAppendMercQuizAudio === "function") {
+            window.kvlAppendMercQuizAudio($("listenFeedback"), q.item);
+          }
+        } else if (q.feedbackHtml) {
           $("listenFeedback").innerHTML = q.feedbackHtml;
         }
 
@@ -13536,33 +13618,13 @@ function renderVocabularyList(query = "") {
         $("listenPrompt").textContent = item.korean;
         $("listenPrompt").classList.add("korean");
         $("listenPrompt").lang = "ko";
-        // Feedback: roasting sama seperti Quiz/Typing via pickRoast()
-        const fb = document.createElement("div");
-        fb.className = "practice-feedback " + (correct ? "good" : "bad");
-        const strong = document.createElement("strong");
+        // Cinematic feedback. Keep the prior roast-streak bookkeeping without adding variable copy over the artwork.
         if (correct) {
           if (typeof resetRoastStreak === "function") resetRoastStreak();
-          strong.textContent =
-            (typeof t === "function" ? t("fb.correct") : null) || "Bener ✓";
-        } else {
-          // Hanya roast saat salah; hindari double-roast saat re-render
-          if (firstTime && typeof pickRoast === "function") {
-            strong.textContent = pickRoast();
-          } else if (q.roastLine) {
-            strong.textContent = q.roastLine;
-          } else if (typeof pickRoast === "function") {
-            strong.textContent = pickRoast();
-          } else {
-            strong.textContent = "Belum pas.";
-          }
-          q.roastLine = strong.textContent;
+        } else if (firstTime && typeof pickRoast === "function") {
+          q.roastLine = pickRoast();
         }
-        const detail = document.createElement("div");
-        detail.textContent = correct
-          ? item.korean + " · " + item.meaning + ". Dengarkan lagi biar nempel."
-          : "Yang bener: " + item.korean + " · " + item.meaning + ".";
-        fb.append(strong, detail);
-        $("listenFeedback").replaceChildren(fb);
+        $("listenFeedback").replaceChildren(window.kvlRenderMercFeedback(correct, item));
         q.feedbackHtml = $("listenFeedback").innerHTML;
         if (typeof updateListenNavButtons === "function") updateListenNavButtons();
         if (typeof updateListenStatusBar === "function") updateListenStatusBar();
@@ -14121,13 +14183,26 @@ function renderVocabularyList(query = "") {
             q._choiceField = field;
           }
         }
-        opts.forEach((opt) => {
+        const letters = ["A", "B", "C", "D", "E"];
+        opts.forEach((opt, index) => {
           const b = document.createElement("button");
           b.type = "button";
           b.className = "practice-choice";
-          b.textContent = opt[field];
           b.dataset.uid = opt.uid;
-          b.addEventListener("click", () => memoryChoice(opt.uid));
+          const letter = document.createElement("span");
+          letter.className = "choice-letter";
+          letter.textContent = letters[index] || String(index + 1);
+          const label = document.createElement("span");
+          label.className = "practice-choice-label";
+          label.textContent = opt[field];
+          b.append(letter, label);
+          if (q && q.answered) {
+            b.disabled = true;
+            if (opt.uid === item.uid) b.classList.add("correct");
+            if (q.userAnswer && opt.uid === q.userAnswer && q.correct === false) b.classList.add("wrong");
+          } else {
+            b.addEventListener("click", () => memoryChoice(opt.uid));
+          }
           box.append(b);
         });
       }
@@ -14219,27 +14294,9 @@ function renderVocabularyList(query = "") {
         return lines.join('\n');
       }
       function memoryFeedback(correct, answer, message, item) {
-        const fb = document.createElement('div');
-        fb.className = 'practice-feedback ' + (correct ? 'good' : 'bad');
-        const strong = document.createElement('strong');
-        if (correct) {
-          const goods = ['Wih bener 🔥', 'Nah gitu dong.', 'Gas, nempel.', 'Yes betul.', 'Oke sip.'];
-          strong.textContent = goods[Math.floor(Math.random() * goods.length)];
-        } else {
-          const bads = ['Belum nih.', 'Meleset dikit.', 'Kasih chance sekali lagi.', 'Hmm belum pas.'];
-          strong.textContent = bads[Math.floor(Math.random() * bads.length)];
-        }
-        const detail = document.createElement('div');
-        detail.style.whiteSpace = 'pre-line';
-        let body = message || '';
-        if (answer) body += (body ? '\n' : '') + 'Yang bener nih: ' + answer;
-        if (item) {
-          body += '\n\n' + teacherExplainItem(item);
-          if (!correct) body += '\n\nNanti muncul lagi, santai aja. Asal diulang bakalan nempel.';
-        }
-        detail.textContent = body;
-        fb.append(strong, detail);
-        if ($('memoryFeedback')) $('memoryFeedback').replaceChildren(fb);
+        const target = $('memoryFeedback');
+        if (!target || !item || (correct !== true && correct !== false)) return;
+        target.replaceChildren(window.kvlRenderMercFeedback(correct, item));
       }
 
       function afterMemoryAnswer(correct) {
@@ -16725,10 +16782,8 @@ function restoreMemoryAnswerUI(q) {
     if (csEl('revealMemoryRecall')) csEl('revealMemoryRecall').classList.add('hidden');
   }
   var box = csEl('memoryFeedback');
-  if (box) {
-    var status = q.correct ? 'Bener ✓' : 'Masih salah';
-    var detail = (item.korean || '') + ' · ' + (item.meaning || '');
-    box.innerHTML = '<div class="practice-feedback ' + (q.correct ? 'good' : 'bad') + ' guide-box"><strong>' + status + '</strong><div>' + detail + '</div><div class="guide-hint">Jawaban lu di soal ini udah ke-save. Bisa lanjut atau balik ke soal lain.</div></div>';
+  if (box && (q.correct === true || q.correct === false) && typeof window.kvlRenderMercFeedback === 'function') {
+    box.replaceChildren(window.kvlRenderMercFeedback(q.correct, item));
   }
 }
 
@@ -18179,6 +18234,94 @@ setTimeout(function () {
   if (row.parentElement !== homeView) homeView.append(row);
   row.append(quoteDivider, quote);
   rightColumn.classList.add('merc-quote-relocated');
+})();
+</script>
+
+<script id="merc-cinematic-feedback-runtime">
+(function () {
+  'use strict';
+  var wrongAsset = 'assets/merc-feedback-target-lost.webp';
+  var correctAsset = 'assets/merc-feedback-contract-confirmed.webp';
+
+  function renderMercFeedback(correct, item) {
+    var isCorrect = correct === true;
+    var korean = String((item && item.korean) || '').trim();
+    var meaning = String((item && item.meaning) || '').trim();
+    var panel = document.createElement('div');
+    panel.className = 'merc-feedback ' + (isCorrect ? 'merc-feedback--correct' : 'merc-feedback--wrong');
+    panel.setAttribute('role', 'status');
+    panel.setAttribute('aria-live', 'polite');
+    panel.setAttribute('aria-atomic', 'true');
+
+    var image = document.createElement('img');
+    image.className = 'merc-feedback__art';
+    image.src = isCorrect ? correctAsset : wrongAsset;
+    image.alt = '';
+    image.setAttribute('aria-hidden', 'true');
+    image.decoding = 'async';
+    image.loading = 'eager';
+    image.draggable = false;
+    image.width = 1536;
+    image.height = isCorrect ? 513 : 443;
+    image.addEventListener('error', function () {
+      panel.classList.add('merc-feedback--asset-fallback');
+      image.remove();
+    }, { once: true });
+
+    var announced = document.createElement('span');
+    announced.className = 'merc-feedback__sr';
+    announced.textContent = (isCorrect ? 'Jawaban benar. Contract confirmed. ' : 'Jawaban salah. Target lost. ') +
+      (korean ? korean + '. ' : '') + (meaning ? meaning + '.' : '');
+
+    var word = document.createElement('span');
+    word.className = 'merc-feedback__word' + (Array.from(korean).length >= 4 ? ' is-long' : '') + (Array.from(korean).length >= 6 ? ' is-extra-long' : '');
+    word.lang = 'ko';
+    word.textContent = korean || '—';
+    word.setAttribute('aria-hidden', 'true');
+
+    var translation = document.createElement('span');
+    translation.className = 'merc-feedback__meaning' + (Array.from(meaning).length >= 19 ? ' is-long' : '');
+    translation.textContent = meaning || 'Arti belum tersedia';
+    translation.setAttribute('aria-hidden', 'true');
+
+    var mobileIntel = document.createElement('div');
+    mobileIntel.className = 'merc-feedback__mobile-intel';
+    mobileIntel.setAttribute('aria-hidden', 'true');
+    var mobileWord = document.createElement('span');
+    mobileWord.className = 'merc-feedback__mobile-word' + (Array.from(korean).length >= 4 ? ' is-long' : '');
+    mobileWord.lang = 'ko';
+    mobileWord.textContent = korean || '—';
+    var mobileDivider = document.createElement('span');
+    mobileDivider.className = 'merc-feedback__mobile-divider';
+    var mobileMeaning = document.createElement('span');
+    mobileMeaning.className = 'merc-feedback__mobile-meaning' + (Array.from(meaning).length >= 19 ? ' is-long' : '');
+    mobileMeaning.textContent = meaning || 'Arti belum tersedia';
+    mobileIntel.append(mobileWord, mobileDivider, mobileMeaning);
+
+    panel.append(image, announced, word, translation, mobileIntel);
+    return panel;
+  }
+
+  function appendQuizAudio(container, item) {
+    var hasVoice = false;
+    try { hasVoice = typeof getChosenVoice === 'function' && !!getChosenVoice(); } catch (e) {}
+    if (!container || !item || !item.korean || !hasVoice || typeof speakKorean !== 'function') return;
+    var audio = document.createElement('button');
+    audio.type = 'button';
+    audio.className = 'sound-button small merc-feedback-audio';
+    audio.textContent = '🔊';
+    audio.title = 'Dengarkan jawaban Korea yang benar';
+    audio.setAttribute('aria-label', 'Dengarkan jawaban Korea yang benar');
+    audio.addEventListener('click', function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      speakKorean(item.korean, audio);
+    });
+    container.append(audio);
+  }
+
+  window.kvlRenderMercFeedback = renderMercFeedback;
+  window.kvlAppendMercQuizAudio = appendQuizAudio;
 })();
 </script>
 
