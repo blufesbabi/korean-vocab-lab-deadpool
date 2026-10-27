@@ -1,8 +1,13 @@
-# korean-vocab-lab-deadpool
-Korean Vocab Lab Web App
-Korean Vocab Lab - Deadpool responsive quote alignment preview
+Korean Vocab Lab · Merc Mode — Cinematic Combat Feedback
 
-Preview locally: open index.html in a browser with the assets folder next to it.
-For Android/mobile preview, use the standalone HTML file supplied separately.
+To preview: open index.html in a modern browser with the assets folder beside it.
 
-Scoped change only: the Daily Quote row now aligns with the main content/progress panel on desktop and mobile. The footer portrait remains confined to the far-left navigation column. The quote image asset itself is unchanged and not re-compressed. All other app markup, behavior, and source asset bytes are preserved.
+Cinematic feedback assets:
+- assets/merc-feedback-target-lost.webp
+- assets/merc-feedback-contract-confirmed.webp
+
+The template artwork is static, while the Korean vocabulary and Indonesian meaning are rendered as dynamic text from each active question. The same two templates work across Quiz, Typing, Listening, Memory Lab, and the shared Custom Study feedback path without baking one word into every answer image.
+
+At narrow phone widths, artwork remains visible and dynamic vocabulary/meaning move into a readable strip directly below it. Desktop/tablet layouts place the live text inside the original intel panel.
+
+The transparent question progress companion image remains at assets/question-progress-companion.png. Existing app assets and learning/scoring logic are preserved; feedback presentation and answer-state visibility/restoration are the relevant changes in this revision.
