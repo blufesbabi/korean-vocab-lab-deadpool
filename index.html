@@ -4520,8 +4520,9 @@ body::before {
 }
 .merc-bottom-visual-row .merc-quote-bg {
   max-width: 100% !important;
-  height: auto !important;
+  height: 100% !important;
   object-fit: cover !important;
+  object-position: center -10% !important;
 }
 .app > .merc-footer {
   grid-column: 1 / -1 !important;
@@ -4680,6 +4681,102 @@ body::before {
   border: var(--fw) solid transparent; border-image: var(--mg-frame) 115 / var(--fw) stretch; border-radius: 0;
 }
 @media (max-width: 1100px) { .app > .main-nav .nav-btn { --fw: 4px; } }
+
+/* ===== Active question companion: natural-width number tiles, image overlaps the tile edge ===== */
+.q-status-bar {
+  align-items: flex-end;
+  align-content: flex-start;
+  column-gap: 6px;
+  row-gap: 7px;
+  max-height: 220px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  padding: 8px clamp(59px, 3.35vw, 64px) 5px 32px;
+}
+.q-status-item {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  min-width: 0;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: visible;
+}
+.q-status-item.is-current {
+  --q-companion-width: clamp(100px, 8.2vw, 116px);
+  --q-companion-height: clamp(81px, 6.8vw, 95px);
+  --q-status-pill-height: 33px;
+  --q-contact-offset: clamp(28px, 2.6vw, 34px);
+  /* Reserve vertical room only: tile width stays identical to its neighbors. */
+  padding-top: calc(var(--q-companion-height) - var(--q-contact-offset));
+}
+.q-status-companion {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  bottom: calc(var(--q-status-pill-height, 33px) - var(--q-contact-offset, 28px));
+  display: block;
+  width: var(--q-companion-width, 100px);
+  height: var(--q-companion-height, auto);
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  object-fit: contain;
+  object-position: center bottom;
+  transform: translateX(-50%);
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.q-status-pill {
+  position: relative;
+  z-index: auto;
+  flex: 0 0 auto;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 40px;
+  min-height: 28px;
+  padding: 6px 8px;
+  white-space: nowrap;
+}
+.q-status-pill.is-current {
+  /* Keep the exact same footprint as neighboring question tiles. */
+  flex-direction: row;
+  justify-content: center;
+  min-width: 40px;
+  min-height: var(--q-status-pill-height, 33px);
+  padding: 6px 8px;
+  color: #fff0ec;
+  border: 1px solid #c52b34;
+  background:
+    radial-gradient(120% 90% at 28% 0%, rgba(255,150,140,.26), transparent 52%),
+    var(--mg-grunge) 0 0 / 160px 160px,
+    linear-gradient(180deg, #9d1018 0%, #70070e 55%, #4b0408 100%);
+  box-shadow: inset 0 1px 0 rgba(255,180,170,.24), 0 0 8px rgba(150,0,12,.25);
+}
+.q-status-label { position: relative; z-index: 7; text-shadow: 0 1px 3px rgba(0,0,0,.95); }
+.q-status-item.is-current .q-status-label { min-height: 12px; font-size: 11px; }
+@media (max-width: 420px) {
+  .q-status-bar { column-gap: 5px; row-gap: 7px; padding: 8px 59px 5px 30px; max-height: 220px; }
+  .q-status-item.is-current {
+    --q-companion-width: 100px;
+    --q-companion-height: 81px;
+    --q-status-pill-height: 33px;
+    --q-contact-offset: 28px;
+    padding-top: calc(var(--q-companion-height) - var(--q-contact-offset));
+  }
+  .q-status-pill { min-width: 36px; padding: 5px 6px; }
+  .q-status-pill.is-current { min-width: 36px; }
+}
 </style>
 
 <style id="deadpool-small-steps-divider">
@@ -5113,7 +5210,9 @@ body::before {
                   <option value="Bab 2">Bab 2</option>
                   <option value="Bab 3">Bab 3</option>
                   <option value="Bab 4">Bab 4</option>
-                  <option value="Bab 5">Bab 5</option></select><span class="hint"
+                  <option value="Bab 5">Bab 5</option>
+                  <option value="Bab 6">Bab 6</option>
+                  <option value="Bab 7">Bab 7</option></select><span class="hint"
                   >Bab 2 memakai nomor 1, 2, 3… sendiri. Semua bab = nomor urut
                   gabungan.</span
                 >
@@ -5414,7 +5513,8 @@ body::before {
                 <option value="Bab 2">Bab 2</option>
                   <option value="Bab 3">Bab 3</option>
                   <option value="Bab 4">Bab 4</option>
-                  <option value="Bab 5">Bab 5</option><option value="Bab 6">Bab 6</option></select><input
+                  <option value="Bab 5">Bab 5</option><option value="Bab 6">Bab 6</option>
+                  <option value="Bab 7">Bab 7</option></select><input
                 class="control"
                 id="reviewSearch"
                 type="search"
@@ -5476,6 +5576,8 @@ body::before {
                   <option value="Bab 3">Bab 3</option>
                   <option value="Bab 4">Bab 4</option>
                   <option value="Bab 5">Bab 5</option>
+                  <option value="Bab 6">Bab 6</option>
+                  <option value="Bab 7">Bab 7</option>
                     <option value="Kosakata Kelas" selected>
                       Kosakata Kelas
                     </option>
@@ -5550,6 +5652,8 @@ body::before {
                   <option value="Bab 3">Bab 3</option>
                   <option value="Bab 4">Bab 4</option>
                   <option value="Bab 5">Bab 5</option>
+                  <option value="Bab 6">Bab 6</option>
+                  <option value="Bab 7">Bab 7</option>
                   <option value="Kosakata Kelas" selected>
                     Kosakata Kelas
                   </option>
@@ -5722,6 +5826,8 @@ body::before {
                   <option value="Bab 3">Bab 3</option>
                   <option value="Bab 4">Bab 4</option>
                   <option value="Bab 5">Bab 5</option>
+                  <option value="Bab 6">Bab 6</option>
+                  <option value="Bab 7">Bab 7</option>
                 </select>
               </div>
               <div class="field">
@@ -5970,6 +6076,8 @@ body::before {
                   <option value="Bab 3">Bab 3</option>
                   <option value="Bab 4">Bab 4</option>
                   <option value="Bab 5">Bab 5</option>
+                  <option value="Bab 6">Bab 6</option>
+                  <option value="Bab 7">Bab 7</option>
                 </select>
               </div>
               <div class="field">
@@ -6177,6 +6285,7 @@ body::before {
                   <option value="Bab 4">Bab 4</option>
                   <option value="Bab 5">Bab 5</option>
                   <option value="Bab 6">Bab 6</option>
+                  <option value="Bab 7">Bab 7</option>
                 </select>
               </div>
               <div class="field">
@@ -6376,6 +6485,8 @@ body::before {
                   <option value="Bab 3">Bab 3</option>
                   <option value="Bab 4">Bab 4</option>
                   <option value="Bab 5">Bab 5</option>
+                  <option value="Bab 6">Bab 6</option>
+                  <option value="Bab 7">Bab 7</option>
                     </select>
                   </div>
                   <div class="field">
@@ -6428,6 +6539,8 @@ body::before {
                       <label class="chapter-picker-item"><input type="checkbox" data-cs-cat="Bab 3" /> Bab 3</label>
                       <label class="chapter-picker-item"><input type="checkbox" data-cs-cat="Bab 4" /> Bab 4</label>
                       <label class="chapter-picker-item"><input type="checkbox" data-cs-cat="Bab 5" /> Bab 5</label>
+                      <label class="chapter-picker-item"><input type="checkbox" data-cs-cat="Bab 6" /> Bab 6</label>
+                      <label class="chapter-picker-item"><input type="checkbox" data-cs-cat="Bab 7" /> Bab 7</label>
                     </div>
                   </details>
                   <input class="control" id="customStudySearch" type="search" placeholder="Cari Hangeul atau arti…" aria-label="Cari kosakata custom study" autocomplete="off" />
@@ -8065,7 +8178,106 @@ body::before {
         { no: 113, korean: "자기 개발", meaning: "mengembangkan diri", category: "Bab 6" },
         { no: 114, korean: "외국어", meaning: "bahasa asing", category: "Bab 6" },
         { no: 115, korean: "학원", meaning: "lembaga pendidikan", category: "Bab 6" },
-        { no: 116, korean: "다니다", meaning: "pergi.", category: "Bab 6" }
+        { no: 116, korean: "다니다", meaning: "pergi.", category: "Bab 6" },
+        { no: 1, korean: "계절", meaning: "musim", category: "Bab 7" },
+        { no: 2, korean: "날씨", meaning: "cuaca", category: "Bab 7" },
+        { no: 3, korean: "오늘", meaning: "hari ini", category: "Bab 7" },
+        { no: 4, korean: "어때요?", meaning: "bagaimana", category: "Bab 7" },
+        { no: 5, korean: "너무", meaning: "sangat", category: "Bab 7" },
+        { no: 6, korean: "덥다", meaning: "panas untuk cuaca", category: "Bab 7" },
+        { no: 7, korean: "좋아하다", meaning: "menyukai", category: "Bab 7" },
+        { no: 8, korean: "대해", meaning: "tentang", category: "Bab 7" },
+        { no: 9, korean: "말하다", meaning: "berbicara", category: "Bab 7" },
+        { no: 10, korean: "묻다", meaning: "bertanya", category: "Bab 7" },
+        { no: 11, korean: "대답하다", meaning: "menjawab", category: "Bab 7" },
+        { no: 12, korean: "따뜻하다", meaning: "hangat", category: "Bab 7" },
+        { no: 13, korean: "봄", meaning: "musim semi", category: "Bab 7" },
+        { no: 14, korean: "여름", meaning: "musim panas", category: "Bab 7" },
+        { no: 15, korean: "겨울", meaning: "musim dingin", category: "Bab 7" },
+        { no: 16, korean: "춥다", meaning: "dingin untuk cuaca", category: "Bab 7" },
+        { no: 17, korean: "가을", meaning: "musim gugur", category: "Bab 7" },
+        { no: 18, korean: "시원하다", meaning: "sejuk", category: "Bab 7" },
+        { no: 19, korean: "쉬다", meaning: "istirahat", category: "Bab 7" },
+        { no: 20, korean: "어렵다", meaning: "sulit", category: "Bab 7" },
+        { no: 21, korean: "차갑다", meaning: "dingin untuk benda", category: "Bab 7" },
+        { no: 22, korean: "뜨겁다", meaning: "nanas untuk benda", category: "Bab 7" },
+        { no: 23, korean: "조금", meaning: "sedikit", category: "Bab 7" },
+        { no: 24, korean: "영어", meaning: "b. inggris", category: "Bab 7" },
+        { no: 25, korean: "한국어 공부", meaning: "belajar b. korea", category: "Bab 7" },
+        { no: 26, korean: "날씨가 좋다", meaning: "Cuacanya bagus", category: "Bab 7" },
+        { no: 27, korean: "날씨가 나쁘다", meaning: "cuacanya buruk", category: "Bab 7" },
+        { no: 28, korean: "맑다", meaning: "cerah", category: "Bab 7" },
+        { no: 29, korean: "흐리다", meaning: "mendung", category: "Bab 7" },
+        { no: 30, korean: "바람이 불다", meaning: "berhembusan angin", category: "Bab 7" },
+        { no: 31, korean: "눈이 오다", meaning: "salju turun", category: "Bab 7" },
+        { no: 32, korean: "눈이 그치다", meaning: "salju berhenti/reda", category: "Bab 7" },
+        { no: 33, korean: "비가 오다", meaning: "hujan turun", category: "Bab 7" },
+        { no: 34, korean: "비가 그치다", meaning: "hujan berhenti/reda", category: "Bab 7" },
+        { no: 35, korean: "많이", meaning: "banyak", category: "Bab 7" },
+        { no: 36, korean: "정말", meaning: "sangat, sungguh", category: "Bab 7" },
+        { no: 37, korean: "별로", meaning: "terlalu, berdasarkan", category: "Bab 7" },
+        { no: 38, korean: "여보세요?", meaning: "halo untuk telfon", category: "Bab 7" },
+        { no: 39, korean: "안", meaning: "tidak", category: "Bab 7" },
+        { no: 40, korean: "그게 좋겠어요", meaning: "sepertinya itu bagus", category: "Bab 7" },
+        { no: 41, korean: "ㄹ까요?", meaning: "akan, bagaimana kalau?", category: "Bab 7" },
+        { no: 42, korean: "사계절", meaning: "4 musim", category: "Bab 7" },
+        { no: 43, korean: "뚜렷하다", meaning: "jelas", category: "Bab 7" },
+        { no: 44, korean: "나라", meaning: "negara", category: "Bab 7" },
+        { no: 45, korean: "벚꽃", meaning: "bunga sakura", category: "Bab 7" },
+        { no: 46, korean: "영산홍", meaning: "bunga Azalea merah", category: "Bab 7" },
+        { no: 47, korean: "아름답다", meaning: "indah", category: "Bab 7" },
+        { no: 48, korean: "꽃", meaning: "bunga", category: "Bab 7" },
+        { no: 49, korean: "피다", meaning: "mekar", category: "Bab 7" },
+        { no: 50, korean: "봄맞이", meaning: "penyambutan musim semi", category: "Bab 7" },
+        { no: 51, korean: "구경하다", meaning: "melihat lihat", category: "Bab 7" },
+        { no: 52, korean: "경치", meaning: "pemandangan", category: "Bab 7" },
+        { no: 53, korean: "즐기다", meaning: "menikmati", category: "Bab 7" },
+        { no: 54, korean: "장마", meaning: "musim hujan di musim panas", category: "Bab 7" },
+        { no: 55, korean: "끝나다", meaning: "selesai", category: "Bab 7" },
+        { no: 56, korean: "도", meaning: "derajat, juga, pulau", category: "Bab 7" },
+        { no: 57, korean: "넘다", meaning: "lebih", category: "Bab 7" },
+        { no: 58, korean: "무더위", meaning: "panas terik", category: "Bab 7" },
+        { no: 59, korean: "해변", meaning: "pantai", category: "Bab 7" },
+        { no: 60, korean: "계곡", meaning: "lembah", category: "Bab 7" },
+        { no: 61, korean: "휴가", meaning: "cuti, liburan", category: "Bab 7" },
+        { no: 62, korean: "떠나다", meaning: "pergi", category: "Bab 7" },
+        { no: 63, korean: "열대야", meaning: "malam panas tropis", category: "Bab 7" },
+        { no: 64, korean: "잠을 설치다", meaning: "susah tidur", category: "Bab 7" },
+        { no: 65, korean: "이어지다", meaning: "berlanjut, berikutnya", category: "Bab 7" },
+        { no: 66, korean: "형형색색", meaning: "warna warni", category: "Bab 7" },
+        { no: 67, korean: "곱게", meaning: "dengan indah", category: "Bab 7" },
+        { no: 68, korean: "물들다", meaning: "berubah warna", category: "Bab 7" },
+        { no: 69, korean: "단풍", meaning: "daun maple /dedaunan musim gugur", category: "Bab 7" },
+        { no: 70, korean: "산", meaning: "gunung", category: "Bab 7" },
+        { no: 71, korean: "여행", meaning: "wisata", category: "Bab 7" },
+        { no: 72, korean: "학교", meaning: "sekolah", category: "Bab 7" },
+        { no: 73, korean: "축제", meaning: "festival", category: "Bab 7" },
+        { no: 74, korean: "중요하다", meaning: "penting", category: "Bab 7" },
+        { no: 75, korean: "행사", meaning: "acara", category: "Bab 7" },
+        { no: 76, korean: "열리다", meaning: "membuka", category: "Bab 7" },
+        { no: 77, korean: "영하", meaning: "dibawah 0 (-)", category: "Bab 7" },
+        { no: 78, korean: "까지", meaning: "sampai", category: "Bab 7" },
+        { no: 79, korean: "내려가다", meaning: "pergi turun", category: "Bab 7" },
+        { no: 80, korean: "정도", meaning: "kira kira, sekitar, kurang lebih", category: "Bab 7" },
+        { no: 81, korean: "매우", meaning: "sangat", category: "Bab 7" },
+        { no: 82, korean: "강물", meaning: "air sungai", category: "Bab 7" },
+        { no: 83, korean: "얼다", meaning: "membeku", category: "Bab 7" },
+        { no: 84, korean: "높다", meaning: "tinggi", category: "Bab 7" },
+        { no: 85, korean: "지대", meaning: "dataran/daerah tinggi", category: "Bab 7" },
+        { no: 86, korean: "내리다", meaning: "turun", category: "Bab 7" },
+        { no: 87, korean: "스키", meaning: "sky", category: "Bab 7" },
+        { no: 88, korean: "스케이트보드", meaning: "skateboard", category: "Bab 7" },
+        { no: 89, korean: "스포츠", meaning: "sport, olahraga", category: "Bab 7" },
+        { no: 90, korean: "삼한사온", meaning: "3hari dingin 4 hari panas", category: "Bab 7" },
+        { no: 91, korean: "현상", meaning: "fenomena", category: "Bab 7" },
+        { no: 92, korean: "나타나다", meaning: "muncul", category: "Bab 7" },
+        { no: 93, korean: "그러나", meaning: "namun", category: "Bab 7" },
+        { no: 94, korean: "요즘", meaning: "akhir akhir ini", category: "Bab 7" },
+        { no: 95, korean: "이상", meaning: "aneh", category: "Bab 7" },
+        { no: 96, korean: "기온", meaning: "suhu", category: "Bab 7" },
+        { no: 97, korean: "짧다", meaning: "pendek", category: "Bab 7" },
+        { no: 98, korean: "다고", meaning: "katanya", category: "Bab 7" },
+        { no: 99, korean: "이야기하다", meaning: "bercerita", category: "Bab 7" }
       ];
 
       const APP_DATA_KEY = "koreanVocabLab.v2"; // v3 UI, same data key for compatibility
@@ -8961,7 +9173,7 @@ body::before {
       function syncChapterSelects() {
         const cats = typeof listCategories === "function"
           ? listCategories()
-          : ["Bab 1", "Bab 2", "Bab 3", "Bab 4", "Bab 5", "Bab 6"];
+          : ["Bab 1", "Bab 2", "Bab 3", "Bab 4", "Bab 5", "Bab 6", "Bab 7"];
         // settings.chapter is the one authoritative scope restored from the existing settings key.
         const savedScope = String((settings && settings.chapter) || "all");
         const value = (savedScope === "all" || savedScope === "Semua" || cats.includes(savedScope))
@@ -10073,7 +10285,7 @@ body::before {
         vocabulary.forEach((v) => {
           if (v.category) set.add(v.category);
         });
-        const preferred = ["Bab 1", "Bab 2", "Bab 3", "Bab 4", "Bab 5", "Bab 6"];
+        const preferred = ["Bab 1", "Bab 2", "Bab 3", "Bab 4", "Bab 5", "Bab 6", "Bab 7"];
         const rest = [...set]
           .filter((c) => !preferred.includes(c))
           .sort((a, b) => a.localeCompare(b, "id"));
@@ -14042,6 +14254,8 @@ function renderVocabularyList(query = "") {
             if (fb) q.feedbackHtml = fb.innerHTML;
           } catch (e) {}
         }
+        // Keep the navigator aligned with the same answer state immediately.
+        if (typeof updateMemoryStatusBar === 'function') updateMemoryStatusBar();
         // JANGAN push soal salah kembali ke queue sesi aktif.
         // Pengulangan hanya lewat tombol "Ulangi jawaban salah" di ringkasan.
         // (Dulu: st.queue.push pada jawaban salah → total soal bertambah misterius.)
@@ -16753,33 +16967,73 @@ function skipWriteSoft() {
 })();
 
 
-/* ===== Question status bars (✓ / ↷ / ○) ===== */
+/* ===== Question status bars (✓ / ○) + separate active-question companion ===== */
 function renderStatusBar(containerId, total, getStatus, onJump, activeIndex) {
   var box = document.getElementById(containerId);
   if (!box) return;
+  var previousScrollTop = box.scrollTop;
   box.replaceChildren();
   var active = typeof activeIndex === 'number' ? activeIndex : -1;
+  var activeItem = null;
+
   for (var i = 0; i < total; i++) {
     var st = getStatus(i); // 'done' | 'skip' | 'todo'
+    var isActive = i === active;
+    var item = document.createElement('div');
+    item.className = 'q-status-item' + (isActive ? ' is-current' : '');
+
     var pill = document.createElement('button');
     pill.type = 'button';
-    pill.className = 'q-status-pill is-' + st + (i === active ? ' is-current' : '');
-    var icon = st === 'done' ? '✓' : '○';
-    pill.textContent = icon + ' ' + (i + 1);
+    pill.className = 'q-status-pill is-' + st + (isActive ? ' is-current' : '');
+
+    /* The transparent cutout is a separate element anchored to the active tile, not inside its button. */
+    if (isActive) {
+      var companionImage = document.createElement('img');
+      companionImage.className = 'q-status-companion';
+      companionImage.src = './assets/question-progress-companion.png';
+      companionImage.alt = '';
+      companionImage.setAttribute('aria-hidden', 'true');
+      companionImage.decoding = 'async';
+      companionImage.draggable = false;
+      item.appendChild(companionImage);
+      activeItem = item;
+    }
+
+    var statusLabel = document.createElement('span');
+    statusLabel.className = 'q-status-label';
+    var statusIcon = document.createElement('span');
+    statusIcon.className = 'q-status-symbol';
+    statusIcon.textContent = st === 'done' ? '✓' : '○';
+    var numberLabel = document.createElement('span');
+    numberLabel.className = 'q-status-number';
+    numberLabel.textContent = String(i + 1);
+    statusLabel.append(statusIcon, numberLabel);
+    pill.appendChild(statusLabel);
+
     pill.title =
       (st === 'done' ? 'Dikerjakan' : 'Belum') +
-      (i === active ? ' · Sedang dikerjakan' : '');
-    pill.setAttribute(
-      'aria-label',
-      'Soal ' + (i + 1) + ' · ' + pill.title
-    );
-    pill.setAttribute('aria-current', i === active ? 'step' : 'false');
+      (isActive ? ' · Sedang dikerjakan' : '');
+    pill.setAttribute('aria-label', 'Soal ' + (i + 1) + ' · ' + pill.title);
+    pill.setAttribute('aria-current', isActive ? 'step' : 'false');
     (function (idx) {
       pill.addEventListener('click', function () {
         if (typeof onJump === 'function') onJump(idx);
       });
     })(i);
-    box.appendChild(pill);
+    item.appendChild(pill);
+    box.appendChild(item);
+  }
+
+  /* Preserve local scroll and keep the full active item (including the portrait) visible. */
+  box.scrollTop = previousScrollTop;
+  if (activeItem) {
+    var boxRect = box.getBoundingClientRect();
+    var activeRect = activeItem.getBoundingClientRect();
+    if (activeRect.top < boxRect.top) {
+      box.scrollTop -= boxRect.top - activeRect.top;
+    } else if (activeRect.bottom > boxRect.bottom) {
+      box.scrollTop += activeRect.bottom - boxRect.bottom;
+    }
   }
 }
 
@@ -17838,19 +18092,10 @@ setTimeout(function () {
 (function () {
   'use strict';
   var topLines = [
-    "You're doing better than I expected, BITCHH",
-    "Another Korean lesson. My lawyer says this counts as character development.",
-    "Keep studying. The international crime scene won't translate itself.",
-    "Look at you, learning instead of making questionable life choices.",
-    "Your brain is leveling up. Suspicious, but I'll allow it.",
-    "you're doing better than i expected, biitchh."
+    "Well, well, well. Look who the fuck showed up. You dumbass bitch ass motherfucker."
   ];
   var dailyLines = [
-    "Life is an endless series of trainwrecks with only brief, commercial like breaks of happiness.",
-    "Satu kata hari ini lebih berguna daripada seribu alasan besok.",
-    "Grammar itu menyebalkan. Menyerah lebih menyebalkan lagi.",
-    "Pelan-pelan juga maju. Bahkan kekacauan punya pola.",
-    "Hafalkan katanya. Drama hidup lu sudah cukup banyak."
+    "You're a walking red flag. Unfortunately, I'm colorblind."
   ];
   var pageLines = {
     memoryView: "Memory archive: use that brain before it files a complaint. Recall first, panic later.",
@@ -17870,8 +18115,7 @@ setTimeout(function () {
   }
   function putDailyQuote() {
     var idx = dayIndex();
-    var quoteIndex = idx % 6;
-    if (quoteIndex === 5) quoteIndex = 0;
+    var quoteIndex = idx % dailyLines.length;
     var top = document.getElementById('mercTopQuote');
     var quote = document.getElementById('mercDailyQuoteText');
     if (top) top.textContent = topLines[idx % topLines.length];
