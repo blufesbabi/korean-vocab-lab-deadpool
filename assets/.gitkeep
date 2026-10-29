@@ -1,5 +1,0 @@
-# Application Assets
-Folder ini digunakan untuk menyimpan seluruh aset digital aplikasi:
-- `/images` : Foto, latar belakang, dan ilustrasi.
-- `/icons`  : Ikon aplikasi (SVG/PNG).
-- `/fonts`  : Font kustom yang digunakan di *user interface*.
